@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>幸運之神 - 參獎</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        body { margin: 0; height: 100vh; background: #1a1a1a; display: flex; justify-content: center; align-items: center; overflow: hidden; font-family: "Microsoft JhengHei", sans-serif; color: white; touch-action: manipulation; }
+
+        /* 中心閃爍火花 */
+        .spark-center { width: 100px; height: 100px; background: radial-gradient(circle, #ff4757 0%, transparent 70%); border-radius: 50%; box-shadow: 0 0 60px #ff4757; animation: pulseSpark 1.2s infinite alternate; position: absolute; z-index: 10; }
+        @keyframes pulseSpark { from { transform: scale(0.8); opacity: 0.5; } to { transform: scale(1.2); opacity: 1; } }
+        
+        #loader { text-align: center; z-index: 100; transition: opacity 0.5s ease; }
+        .loader-text { font-size: 1.5rem; letter-spacing: 5px; color: #ff6b81; opacity: 0.9; text-shadow: 0 0 10px #ff4757; }
+
+        #card { position: absolute; text-align: center; z-index: 10; opacity: 0; transform: scale(0.7); transition: all 0.8s ease-out; }
+        #card.reveal { opacity: 1; transform: scale(1); }
+        h1 { font-size: 2.5rem; color: #ff4757; text-shadow: 0 0 8px #fff; margin: 0; animation: popIn 0.7s forwards; }
+        @keyframes popIn { 0% { transform: scale(0.2); opacity: 0; } 70% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); } }
+        p { color: #f1f2f6; font-size: 1.2rem; margin-top: 15px; line-height: 1.5; }
+        .revelation-btn { margin-top: 30px; padding: 10px 25px; border-radius: 5px; border: 1px solid #ff4757; background: none; color: #ff4757; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; }
+        .revelation-btn:active { background: #ff4757; color: #000; transform: scale(0.95); }
+    </style>
+</head>
+<body>
+    <div class="spark-center"></div>
+    <div id="loader">
+        <div class="loader-text">幸運之門即將開啟...</div>
+    </div>
+
+    <div id="card">
+        <h1>$8,000</h1>
+        <p>你是幸運之神<br>恭喜獲得**參獎**！</p>
+        <button class="revelation-btn" onclick="location.reload()">再次挑戰</button>
+    </div>
+
+    <audio id="bellAudio" src="https://www.soundjay.com/misc/sounds/bell-ringing-01.mp3" preload="auto"></audio>
+    <audio id="sparkleAudio" src="https://www.soundjay.com/misc/sounds/sparkle.mp3" preload="auto"></audio>
+
+    <script>
+        setTimeout(() => {
+            document.getElementById('loader').style.opacity = '0';
+            document.getElementById('bellAudio').play(); // 播放開獎鈴聲
+            if (navigator.vibrate) navigator.vibrate(100); // 手機短震動
+            
+            setTimeout(() => {
+                document.getElementById('loader').style.display = 'none';
+                document.querySelector('.spark-center').style.display = 'none'; // 隱藏中心火花
+                document.getElementById('card').classList.add('reveal');
+                document.getElementById('sparkleAudio').play(); // 播放特效音效
+
+                // 快速火花特效
+                confetti({ particleCount: 120, spread: 60, origin: { y: 0.6 }, colors: ['#ff4757', '#ffffff'] });
+            }, 500);
+        }, 1500); // 1.5 秒後揭曉
+    </script>
+</body>
+</html>
