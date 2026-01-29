@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        body { margin: 0; height: 100vh; background: radial-gradient(circle at center, #2c3e50 0%, #000 100%); display: flex; justify-content: center; align-items: center; overflow: hidden; font-family: "Microsoft JhengHei", sans-serif; color: white; }
+        .mist { position: absolute; width: 200%; height: 200%; background: radial-gradient(circle at center, rgba(149,165,166,0.2) 0%, transparent 70%); animation: rotate 30s linear infinite; }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        #loader { text-align: center; z-index: 100; transform: translateY(-100px); transition: opacity 0.5s; }
+        .crystal { width: 60px; height: 60px; background: #bdc3c7; border-radius: 50%; box-shadow: 0 0 30px #fff; margin: 0 auto 20px; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.7; } 50% { transform: scale(1.2); opacity: 1; } }
+        #card { position: absolute; text-align: center; z-index: 10; opacity: 0; transform: translateY(-50px); transition: all 1s ease-out; }
+        #card.reveal { opacity: 1; transform: translateY(-120px); }
+        h1 { font-size: 3rem; color: #bdc3c7; text-shadow: 0 0 15px #fff; margin: 0; }
+        p { color: #f2f2f2; font-size: 1.3rem; margin-top: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="mist"></div>
+    <div id="loader"><div class="crystal"></div><div style="letter-spacing: 3px; opacity: 0.8;">命運凝聚中...</div></div>
+    <div id="card"><h1>$10,000</h1><p>此獎非你莫屬<br>恭喜獲得貳獎！</p></div>
+    <script>
+        setTimeout(() => {
+            document.getElementById('loader').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('card').classList.add('reveal');
+                confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors: ['#ffffff', '#bdc3c7'] });
+            }, 500);
+        }, 2500);
+    </script>
+</body>
+</html>
