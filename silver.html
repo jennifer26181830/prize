@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>非你莫屬 - 貳獎</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        body { margin: 0; height: 100vh; background: radial-gradient(circle at center, #2c3e50 0%, #000 100%); display: flex; justify-content: center; align-items: center; overflow: hidden; font-family: "Microsoft JhengHei", sans-serif; color: white; touch-action: manipulation; }
+
+        /* 迷霧背景 */
+        .mist { position: absolute; width: 200%; height: 200%; background: radial-gradient(circle at center, rgba(149,165,166,0.3) 0%, transparent 70%); animation: rotateMist 30s linear infinite; }
+        @keyframes rotateMist { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        
+        #loader { text-align: center; z-index: 100; transition: opacity 0.5s ease; }
+        .crystal-orb { width: 80px; height: 80px; border-radius: 50%; background: radial-gradient(circle, #fff 0%, #95a5a6 50%, #bdc3c7 100%); box-shadow: 0 0 30px #bdc3c7; margin: 0 auto 20px; animation: orbPulse 2s infinite; }
+        @keyframes orbPulse { 0% { transform: scale(0.9); opacity: 0.7; } 50% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 50px #bdc3c7; } 100% { transform: scale(0.9); opacity: 0.7; } }
+        .loader-text { font-size: 1.2rem; letter-spacing: 3px; color: #aeb6bf; opacity: 0.8; }
+
+        #card { position: absolute; text-align: center; z-index: 10; opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
+        #card.reveal { opacity: 1; transform: translateY(0); }
+        h1 { font-size: 3rem; color: #bdc3c7; text-shadow: 0 0 10px #fff; margin: 0; animation: fadeIn 1.5s forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+        p { color: #f2f2f2; font-size: 1.3rem; margin-top: 20px; line-height: 1.5; }
+        .revelation-btn { margin-top: 40px; padding: 12px 30px; border-radius: 5px; border: 1px solid #bdc3c7; background: none; color: #bdc3c7; font-size: 1rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; }
+        .revelation-btn:active { background: #bdc3c7; color: #000; transform: scale(0.95); }
+    </style>
+</head>
+<body>
+    <div class="mist"></div>
+
+    <div id="loader">
+        <div class="crystal-orb"></div>
+        <div class="loader-text">命運正在凝聚...</div>
+    </div>
+
+    <div id="card">
+        <h1>$10,000</h1>
+        <p>此獎非你莫屬<br>恭喜獲得**貳獎**！</p>
+        <button class="revelation-btn" onclick="location.reload()">再試一次手氣</button>
+    </div>
+
+    <audio id="dingAudio" src="https://www.soundjay.com/misc/sounds/ding-03.mp3" preload="auto"></audio>
+    <audio id="revealAudio" src="https://www.soundjay.com/buttons/button-2.mp3" preload="auto"></audio>
+
+    <script>
+        setTimeout(() => {
+            document.getElementById('loader').style.opacity = '0';
+            document.getElementById('revealAudio').play(); // 播放揭曉音效
+            if (navigator.vibrate) navigator.vibrate(200); // 手機震動 0.2 秒
+            
+            setTimeout(() => {
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('card').classList.add('reveal');
+                document.getElementById('dingAudio').play(); // 播放中獎音效
+
+                // 銀色流光特效
+                confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors: ['#ffffff', '#bdc3c7', '#74b9ff'] });
+            }, 500);
+        }, 2500); // 2.5 秒後揭曉
+    </script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>天選之人 - 頭獎</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        body { margin: 0; height: 100vh; background: #000; display: flex; justify-content: center; align-items: center; overflow: hidden; font-family: "Microsoft JhengHei", sans-serif; color: white; touch-action: manipulation; }
+        
+        /* 宇宙背景動畫 */
+        .stars { position: absolute; top: 0; left: 0; width: 100%; height: 100%; animation: zoomOut 20s infinite linear; }
+        .stars::before { content: ''; position: absolute; width: 2px; height: 2px; background: #FFF; border-radius: 50%; animation: twinkle 3s infinite alternate; box-shadow: 0 0 5px #FFF; }
+        /* 更多星星點綴 (簡化 CSS，實際可以生成更多) */
+        .stars::after { content: ''; position: absolute; width: 1px; height: 1px; background: #F8F8F8; border-radius: 50%; top: 20%; left: 70%; animation: twinkle 5s infinite alternate; }
+        @keyframes twinkle { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+        @keyframes zoomOut { from { transform: scale(1); } to { transform: scale(1.2); } }
+
+        /* 加載區塊 */
+        #loader { text-align: center; z-index: 100; transition: opacity 0.5s ease; }
+        .countdown { font-size: 4rem; font-weight: bold; margin-bottom: 20px; text-shadow: 0 0 20px #ffd700; color: #ffd700; animation: scaleUp 0.8s infinite alternate; }
+        @keyframes scaleUp { from { transform: scale(1); } to { transform: scale(1.1); } }
+        .loader-text { font-size: 1.2rem; letter-spacing: 5px; color: #bbb; opacity: 0.7; }
+
+        /* 中獎卡片 */
+        #card { position: absolute; text-align: center; z-index: 10; opacity: 0; transform: translateY(50px) scale(0.8); transition: all 1s ease-out; }
+        #card.reveal { opacity: 1; transform: translateY(0) scale(1); }
+        h1 { font-size: 3.5rem; background: linear-gradient(to top, #ffd700, #fff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; text-shadow: 0 0 15px rgba(255,215,0,0.5); animation: bounceIn 1s forwards; }
+        @keyframes bounceIn { 0% { transform: scale(0.5); opacity: 0; } 70% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); } }
+        p { color: #fff; font-size: 1.5rem; margin-top: 25px; text-shadow: 0 0 10px #ffd700; line-height: 1.5; }
+        .revelation-btn { margin-top: 40px; padding: 15px 40px; border-radius: 50px; border: 2px solid #ffd700; background: none; color: #ffd700; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; }
+        .revelation-btn:active { background: #ffd700; color: #000; transform: scale(0.95); }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+
+    <div id="loader">
+        <div class="countdown" id="countdown">3</div>
+        <div class="loader-text">命運正在揭曉...</div>
+    </div>
+
+    <div id="card">
+        <h1>$15,000</h1>
+        <p>你是天選之人<br>恭喜獲得**頭獎**！</p>
+        <button class="revelation-btn" onclick="location.reload()">再試一次天命</button>
+    </div>
+
+    <audio id="revealAudio" src="https://www.soundjay.com/buttons/beep-07a.mp3" preload="auto"></audio>
+    <audio id="winAudio" src="https://www.soundjay.com/misc/sounds/fanfare.mp3" preload="auto"></audio>
+
+    <script>
+        const countdownElement = document.getElementById('countdown');
+        let count = 3;
+
+        const countdownInterval = setInterval(() => {
+            count--;
+            if (count > 0) {
+                countdownElement.innerText = count;
+                document.getElementById('revealAudio').play(); // 播放倒數音效
+            } else {
+                clearInterval(countdownInterval);
+                countdownElement.innerText = 'GO!';
+                setTimeout(() => {
+                    document.getElementById('loader').style.opacity = '0';
+                    setTimeout(() => {
+                        document.getElementById('loader').style.display = 'none';
+                        document.getElementById('card').classList.add('reveal');
+                        document.getElementById('winAudio').play(); // 播放中獎音效
+                        if (navigator.vibrate) navigator.vibrate(500); // 手機震動 0.5 秒
+
+                        // 黃金雨特效
+                        var end = Date.now() + 6000;
+                        (function frame() {
+                            confetti({ particleCount: 20, angle: 90, spread: 360, origin: { y: 0.5 }, colors: ['#ffd700', '#ffffff'], gravity: 0.5, shapes: ['star'] });
+                            if (Date.now() < end) requestAnimationFrame(frame);
+                        }());
+                    }, 500);
+                }, 500);
+            }
+        }, 1000); // 每秒倒數一次
+    </script>
+</body>
+</html>
